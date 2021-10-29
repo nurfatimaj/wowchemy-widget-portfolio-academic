@@ -1,0 +1,29 @@
+{{/* Display author list. */}}
+
+{{ $taxonomy := "authors" }}
+{{ with .Param $taxonomy }}
+  {{ $link_authors := site.Params.link_authors | default true }}
+  {{- $num_authors := len . -}}
+  {{- if gt $num_authors 1 }} with {{ end -}}
+  {{ range $index, $value := . }}
+    {{- if ne $value "admin" -}}
+      {{- $profile_page := site.GetPage (printf "/%s/%s" $taxonomy (. | urlize)) -}}
+      {{- $link_this_author := $profile_page.Params.link_this_author -}}
+      {{- $link := $profile_page.RelPermalink -}}
+      {{- $target := "" -}}
+      {{- if $profile_page.Params.link -}}
+        {{- $link = $profile_page.Params.link -}}
+        {{- $target = "target=\"_blank\" rel=\"noopener\"" -}}
+      {{- end -}}
+      {{- $name := $profile_page.Params.title | default ($value|markdownify) -}}
+      {{- if gt $index 1 }}, {{ end -}}
+      <span>
+        {{- if and $profile_page $link_authors $link_this_author -}}
+          <a href="{{$link}}" {{ $target | safeHTMLAttr }}>{{$name}}</a>
+        {{- else -}}
+          {{$name}}
+        {{- end -}}
+      </span>
+    {{- end -}}
+  {{- end -}}
+{{ end }}
