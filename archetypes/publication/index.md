@@ -10,9 +10,8 @@ doi: ""
 publishDate: {{ .Date }}
 
 # Publication type.
-# Legend: 0 = Uncategorized; 1 = Conference paper; 2 = Journal article;
-# 3 = Preprint / Working Paper; 4 = Report; 5 = Book; 6 = Book section;
-# 7 = Thesis; 8 = Patent
+# Legend: 0 = Uncategorized; 1 = Published paper; 2 = Working paper;
+# 3 = Book and Book sections; 4 = Work in Progress.
 publication_types: ["0"]
 
 # Publication name and optional abbreviated publication name.
