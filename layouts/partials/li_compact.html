@@ -71,7 +71,13 @@
       {{ partial "page_links" (dict "page" $item "is_list" 1) }}
     </div>
     {{ end }}
-
+    
+    {{ if $item.Params.presentations }}
+    <div class="article-metadata" style="font-style: italic;">
+      {{ partial "page_metadata_presentations" $item }}
+    </div>
+    {{ end }}
+    
   </div>
   <div class="ml-3">
     {{ $resource := ($item.Resources.ByType "image").GetMatch "*featured*" }}
