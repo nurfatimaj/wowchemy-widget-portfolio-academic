@@ -1,0 +1,48 @@
+{{/* Presentations sorted by date from earliet to later */}}
+{{ $presentations := sort .Params.presentations "date" "asc" }}
+{{ $presentations_count := len $presentations }}
+
+{{/* Count presentations in the past */}}
+{{ $presentations_before_count := 0 }}
+{{ range $presentations}}
+  {{ if (time .date).Before now }}
+    {{ $presentations_before_count = add $presentations_before_count 1 }}
+  {{ end }}
+{{ end }}
+
+{{/* Count presentations in the future */}}
+{{ $presentations_after_count := sub $presentations_count $presentations_before_count }}
+
+{{/* List presentations */}}
+{{ range $idx, $key := $presentations }}
+  {{ $prefix := "" }}
+  {{ $suffix := "" }}
+  {{ if (time .date).Before now }}
+    {{ if eq $idx 0 }}
+      {{ $prefix = "Presented at"}}
+    {{ else if lt $idx (sub $presentations_before_count 1) }}
+      {{ $prefix = ","}}
+    {{ else }}
+      {{ $prefix = "and"}}
+      {{ $suffix = "." }}
+    {{ end }}
+    {{ $prefix }} the <a href="{{ .link }}">{{ .name | markdownify | emojify }}</a>{{- $suffix }}
+  {{ else }}
+    {{ if eq $idx $presentations_before_count }}
+      {{ $prefix = "Scheduled for presentation at"}}<br>
+    {{ else if lt $idx (sub $presentations_count 1) }}
+      {{ $prefix = ","}}
+    {{ else }}
+      {{ $prefix = "and"}}
+      {{ $suffix = "." }}
+    {{ end }}
+    {{ $prefix }} the <a href="{{ .link }}">{{ .name | markdownify | emojify }}</a>{{- $suffix }}
+    {{ end }}
+{{ end }}
+
+
+
+
+{{/* Already presented */}}
+
+{{/* ***** TODO: Deprecate `url_preprint` in favour of `url_pdf` given there's now a dedicated "Preprint" pub. type. ***** */}}
