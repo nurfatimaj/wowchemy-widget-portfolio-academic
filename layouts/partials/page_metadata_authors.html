@@ -4,7 +4,7 @@
 {{ if .Param $taxonomy }}
   {{- /* Co-authors? */ -}}
   {{- $num_authors := len (.GetTerms $taxonomy) -}}
-  {{- if gt $num_authors 1 }} with {{ end -}}
+  {{- if gt $num_authors 0 }} with {{ end -}}
 
   {{ range $index, $value := (.GetTerms $taxonomy) }}
     {{- if ne $value "admin" -}}
