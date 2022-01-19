@@ -7,7 +7,7 @@
   {{- if gt $num_authors 0 }} with {{ end -}}
 
   {{ range $index, $value := (.GetTerms $taxonomy) }}
-    {{ $value }}
+    {{ eq $value "admin" }}
     {{- if ne $value "admin" -}}
       {{- /* Highlight the author's name? */ -}}
       {{- $highlight_name := .Page.Params.highlight_name | default false -}}
