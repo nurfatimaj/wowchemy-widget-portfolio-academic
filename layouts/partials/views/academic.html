@@ -27,8 +27,8 @@
 {{ else if $item.Summary }}
   {{ $summary = $item.Summary }}
 {{ end }}
-{{ $item }}
-{{ . }}
+{{ $item.Params.summary }}
+
 <div class="media stream-item view-compact">
   <div class="media-body">
 
