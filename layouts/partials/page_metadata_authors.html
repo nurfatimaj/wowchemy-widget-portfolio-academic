@@ -19,7 +19,7 @@
       {{- end -}}
       {{- $name := .Params.title | default ($value|markdownify) -}}
       
-      {{- if gt $index 1 }}, {{ end -}}
+      {{- if and (gt $index 0) (lt $index $num_authors) -}}, {{- else -}}and {{ end -}}
       <span {{ if $highlight_name }}class="author-highlighted"{{end}}>
         {{/* Effectively check the page's `_build` option as `_build` is not exposed in Hugo's Page object. */}}
         <a href="{{$link}}" {{ $target | safeHTMLAttr }}>{{$name}}</a>
