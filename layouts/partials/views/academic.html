@@ -20,7 +20,7 @@
 {{ end }}
 
 {{ $has_attachments := partial "functions/has_attachments" . }}
-{{ .Params.abstract }}
+{{ $item.Params }}
 {{/* Get summary. */}}
 {{ $summary := "" }}
 {{ if $item.Params.summary }}
