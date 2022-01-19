@@ -1,29 +1,37 @@
 {{/* Display author list. */}}
 
-{{ $taxonomy := "authors" }}
-{{ with .Param $taxonomy }}
-  {{ $link_authors := site.Params.link_authors | default true }}
-  {{- $num_authors := len . -}}
+{{- $taxonomy := "authors" }}
+{{ if .Param $taxonomy }}
+  {{- /* Co-authors? */ -}}
+  {{- $num_authors := len (.GetTerms $taxonomy) -}}
   {{- if gt $num_authors 1 }} with {{ end -}}
-  {{ range $index, $value := . }}
+
+  {{ range $index, $value := (.GetTerms $taxonomy) }}
     {{- if ne $value "admin" -}}
-      {{- $profile_page := site.GetPage (printf "/%s/%s" $taxonomy (. | urlize)) -}}
-      {{- $link_this_author := $profile_page.Params.link_this_author -}}
-      {{- $link := $profile_page.RelPermalink -}}
+      {{- /* Highlight the author's name? */ -}}
+      {{- $highlight_name := .Page.Params.highlight_name | default false -}}
+
+      {{- $link := .RelPermalink -}}
       {{- $target := "" -}}
-      {{- if $profile_page.Params.link -}}
-        {{- $link = $profile_page.Params.link -}}
+      {{- if .Params.link -}}
+        {{- $link = .Params.link -}}
         {{- $target = "target=\"_blank\" rel=\"noopener\"" -}}
       {{- end -}}
-      {{- $name := $profile_page.Params.title | default ($value|markdownify) -}}
+      {{- $name := .Params.title | default ($value|markdownify) -}}
+      
       {{- if gt $index 1 }}, {{ end -}}
-      <span>
-        {{- if and $profile_page $link_authors $link_this_author -}}
-          <a href="{{$link}}" {{ $target | safeHTMLAttr }}>{{$name}}</a>
-        {{- else -}}
-          {{$name}}
-        {{- end -}}
+      <span {{ if $highlight_name }}class="author-highlighted"{{end}}>
+        {{/* Effectively check the page's `_build` option as `_build` is not exposed in Hugo's Page object. */}}
+        <a href="{{$link}}" {{ $target | safeHTMLAttr }}>{{$name}}</a>
       </span>
-    {{- end -}}
+      
+      {{- if isset $.Params "author_notes" -}}
+        {{- with (index $.Params.author_notes $index) -}}
+          <i class="author-notes fas fa-info-circle" data-toggle="tooltip" title="{{.}}"></i>
+        {{- end -}}
+      {{- end -}}
+
+    {{ end }}
   {{- end -}}
-{{ end }}
+{{- end -}}
+
